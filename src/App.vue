@@ -1,38 +1,56 @@
 <template>
-  <v-app>
-    <v-toolbar app>
-      <v-toolbar-title class="headline text-uppercase">
-        <span>Vuetify</span>
-        <span class="font-weight-light">MATERIAL DESIGN</span>
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn
-        flat
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-      >
-        <span class="mr-2">Latest Release</span>
-      </v-btn>
+  <v-app id="inspire">
+    <v-navigation-drawer fixed v-model="drawer" app>
+      <v-list dense>
+        <v-list-tile @click>
+          <v-list-tile-action>
+            <v-icon>home</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Bots</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+        <v-list-tile @click>
+          <v-list-tile-action>
+            <v-icon>contact_mail</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>About</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+    </v-navigation-drawer>
+    <v-toolbar color="indigo" dark fixed app>
+      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+      <v-toolbar-title>Helvy.ai</v-toolbar-title>
     </v-toolbar>
-
     <v-content>
-      <HelloWorld/>
+      <v-container fluid fill-height>
+        <v-layout justify-center align-center>
+          <v-flex text-xs-center>
+            <ReposSwitch/>
+          </v-flex>
+        </v-layout>
+      </v-container>
     </v-content>
+    <v-footer color="indigo" app inset>
+      <span class="white--text">&copy; 2019</span>
+    </v-footer>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld'
+import ReposSwitch from "./components/ReposSwitch";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
+    ReposSwitch
   },
-  data () {
+  data() {
     return {
-      //
-    }
+      drawer: true
+    };
   }
-}
+};
 </script>
