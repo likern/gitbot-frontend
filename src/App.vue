@@ -1,5 +1,9 @@
 <template>
   <v-app id="inspire">
+    <v-toolbar color="indigo" dark fixed app>
+      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+      <v-toolbar-title>Helvy.ai</v-toolbar-title>
+    </v-toolbar>
     <v-navigation-drawer fixed v-model="drawer" app>
       <v-list dense>
         <v-list-tile @click>
@@ -20,18 +24,13 @@
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
-    <v-toolbar color="indigo" dark fixed app>
-      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-toolbar-title>Helvy.ai</v-toolbar-title>
-    </v-toolbar>
+
     <v-content>
-      <v-container fluid fill-height>
-        <v-layout justify-center align-center>
-          <v-flex text-xs-center>
-            <ReposSwitch/>
-          </v-flex>
-        </v-layout>
-      </v-container>
+      <v-layout align-top>
+        <v-flex grow mx-5 pt-2>
+          <ReposSwitch/>
+        </v-flex>
+      </v-layout>
     </v-content>
     <v-footer color="indigo" app inset>
       <span class="white--text">&copy; 2019</span>
@@ -41,11 +40,13 @@
 
 <script>
 import ReposSwitch from "./components/ReposSwitch";
+import BotSettings from "./components/BotSettings";
 
 export default {
   name: "App",
   components: {
-    ReposSwitch
+    ReposSwitch,
+    BotSettings
   },
   data() {
     return {

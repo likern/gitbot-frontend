@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card class="card--flex-toolbar">
     <template>
       <v-toolbar card prominent>
         <!-- <v-toolbar-title class="body-5 black--text">All Repositories</v-toolbar-title> -->
@@ -40,7 +40,7 @@
 <script>
 import RepoList from "@/components/RepoList";
 export default {
-  name: "ReposSwitch",
+  name: "BotSettings",
   components: { RepoList },
   data() {
     return {
