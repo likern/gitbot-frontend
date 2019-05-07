@@ -19,7 +19,7 @@
             hide-no-data
             hide-details
             label="Select repositories"
-            solo-inverted
+            solo
             v-if="!searchRepos"
           ></v-autocomplete>
 

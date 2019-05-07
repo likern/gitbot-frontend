@@ -26,9 +26,12 @@
     </v-navigation-drawer>
 
     <v-content>
-      <v-layout align-top>
+      <v-layout align-top column>
         <v-flex grow mx-5 pt-2>
           <ReposSwitch/>
+        </v-flex>
+        <v-flex grow mx-5 pt-2>
+          <BotSettings/>
         </v-flex>
       </v-layout>
     </v-content>
