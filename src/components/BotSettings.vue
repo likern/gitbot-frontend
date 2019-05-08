@@ -30,7 +30,7 @@
           >Labels to use when marking an issue as stale</v-subheader>
         </v-flex>
         <v-flex xs8>
-          <v-text-field label="Labels" value="wontfix"></v-text-field>
+          <LabelList v-model="staleLabels" :labels="labels" defaultText="Labels for stale issue"/>
         </v-flex>
       </v-layout>
 
@@ -41,37 +41,11 @@
           >Issues with these labels will never be considered stale</v-subheader>
         </v-flex>
         <v-flex xs8>
-          <v-autocomplete
+          <LabelList
             v-model="exceptLabels"
-            :disabled="isUpdating"
-            :items="labels"
-            chips
-            color="blue-grey lighten-2"
-            label="Select"
-            item-text="name"
-            item-value="name"
-            multiple
-          >
-            <template v-slot:selection="data">
-              <v-chip
-                :selected="data.selected"
-                close
-                class="chip--select-multi"
-                @input="remove(data.item)"
-              >{{data.item.name}}</v-chip>
-            </template>
-            <template v-slot:item="data">
-              <template v-if="typeof data.item !== 'object'">
-                <v-list-tile-content v-text="data.item"></v-list-tile-content>
-              </template>
-              <template v-else>
-                <v-list-tile-content>
-                  <v-list-tile-title v-html="data.item.name"></v-list-tile-title>
-                  <v-list-tile-sub-title v-html="data.item.group"></v-list-tile-sub-title>
-                </v-list-tile-content>
-              </template>
-            </template>
-          </v-autocomplete>
+            :labels="labels"
+            defaultText="Exclude issues with labels"
+          />
         </v-flex>
       </v-layout>
 
@@ -98,9 +72,10 @@
 
 <script>
 import RepoList from "@/components/RepoList";
+import LabelList from "@/components/LabelList";
 export default {
   name: "BotSettings",
-  components: { RepoList },
+  components: { RepoList, LabelList },
   data() {
     return {
       searchRepos: false,
@@ -130,18 +105,13 @@ export default {
         }
       ],
       labels: [
-        { header: "octocat/Django" },
-        { name: "security", group: "Django" },
-        { name: "wontfix", group: "Django" },
-        { name: "help wanted", group: "Django" },
-        { name: "bug", group: "Django" },
-        { divider: true },
-        { header: "octocat/React-Native" },
-        { name: "wontfix", group: "React Native" },
-        { name: "bug", group: "React Native" },
-        { name: "improvements", group: "React Native" },
-        { name: "tests", group: "React Native" }
+        { id: 1, name: "security" },
+        { id: 2, name: "wontfix" },
+        { id: 3, name: "help wanted" },
+        { id: 4, name: "bug" },
+        { id: 5, name: "improvements" }
       ],
+      staleLabels: [],
       exceptLabels: []
     };
   },
