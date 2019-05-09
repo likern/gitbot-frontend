@@ -1,6 +1,19 @@
 <template>
   <v-card mt-5>
     <v-container fluid>
+      <ButtonGroupSettings v-model="buttons"/>
+      <!-- <v-layout row>
+        <v-flex xs4>
+          <v-subheader class="bot-settings__subheader__">Select the type of objects to be monitored</v-subheader>
+        </v-flex>
+        <v-flex xs8>
+          <v-btn-toggle v-model="text" multiple>
+            <v-btn value="left">ISSUE</v-btn>
+            <v-btn value="center">PULL REQUEST</v-btn>
+          </v-btn-toggle>
+        </v-flex>
+      </v-layout>-->
+
       <v-layout row>
         <v-flex xs4>
           <v-subheader
@@ -63,9 +76,10 @@
 <script>
 import LabelList from "@/components/LabelList";
 import CommentSettings from "@/components/CommentSettings";
+import ButtonGroupSettings from "@/components/ButtonGroupSettings";
 export default {
   name: "StaleBotSettings",
-  components: { LabelList, CommentSettings },
+  components: { ButtonGroupSettings, LabelList, CommentSettings },
   data() {
     return {
       searchRepos: false,
@@ -122,24 +136,43 @@ export default {
       staleLabels: [2],
       exceptLabels: [1],
       buttons: {
-        create: true
+        issue: true,
+        pullRequest: true
       }
     };
+  },
+  watch: {
+    buttons: {
+      handler: function() {
+        console.log(
+          `[Bot Settings] buttons was changed: [${JSON.stringify(
+            this.buttons
+          )}]`
+        );
+      },
+      deep: true
+    },
+    staleLabels: {
+      handler: function() {
+        console.log(
+          `[Bot Settings] staleLabels was changed: [${JSON.stringify(
+            this.staleLabels
+          )}]`
+        );
+      },
+      deep: true
+    },
+    exceptLabels: {
+      handler: function() {
+        console.log(
+          `[Bot Settings] exceptLabels was changed: [${JSON.stringify(
+            this.exceptLabels
+          )}]`
+        );
+      },
+      deep: true
+    }
   }
-  // watch: {
-  //   staleLabels: {
-  //     handler: function() {
-  //       console.log(`[Bot Settings] staleLabels was changed: [${JSON.stringify(this.staleLabels)}]`)
-  //     },
-  //     deep: true
-  //   },
-  //   exceptLabels: {
-  //     handler: function() {
-  //       console.log(`[Bot Settings] exceptLabels was changed: [${JSON.stringify(this.exceptLabels)}]`)
-  //     },
-  //     deep: true
-  //   }
-  // }
 };
 </script>
 
