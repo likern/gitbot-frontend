@@ -49,15 +49,13 @@
         </v-flex>
       </v-layout>
 
-      <CommentSettings
-        v-model="comments.stale.model"
-        :header="comments.stale.header" 
-      />
+      <CommentSettings v-model="comments.stale.model" :header="comments.stale.header"/>
 
-      <CommentSettings
-        v-model="comments.close.model"
-        :header="comments.close.header" 
-      />
+      <CommentSettings v-model="comments.close.model" :header="comments.close.header"/>
+
+      <v-layout row justify-end>
+        <v-btn :disabled="!buttons.create" color="success">CREATE</v-btn>
+      </v-layout>
     </v-container>
   </v-card>
 </template>
@@ -119,13 +117,15 @@ export default {
             enabled: true
           },
           header: "Add comment to stale issue when it is closed"
-        },
-        
+        }
       },
-      staleLabels: [ 2 ],
-      exceptLabels: [ 1 ]
+      staleLabels: [2],
+      exceptLabels: [1],
+      buttons: {
+        create: true
+      }
     };
-  },
+  }
   // watch: {
   //   staleLabels: {
   //     handler: function() {
@@ -138,7 +138,7 @@ export default {
   //       console.log(`[Bot Settings] exceptLabels was changed: [${JSON.stringify(this.exceptLabels)}]`)
   //     },
   //     deep: true
-  //   } 
+  //   }
   // }
 };
 </script>
