@@ -27,11 +27,11 @@
 
     <v-content>
       <v-layout align-top column>
-        <v-flex grow mx-5 pt-2>
+        <!-- <v-flex grow mx-5 pt-2>
           <ReposSwitch/>
-        </v-flex>
+        </v-flex>-->
         <v-flex grow mx-5 pt-2>
-          <BotSettings/>
+          <StaleBotSettings/>
         </v-flex>
       </v-layout>
     </v-content>
@@ -43,13 +43,13 @@
 
 <script>
 import ReposSwitch from "./components/ReposSwitch";
-import BotSettings from "./components/BotSettings";
+import StaleBotSettings from "./components/StaleBotSettings";
 
 export default {
   name: "App",
   components: {
     ReposSwitch,
-    BotSettings
+    StaleBotSettings
   },
   data() {
     return {

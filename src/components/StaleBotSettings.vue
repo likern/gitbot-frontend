@@ -8,7 +8,7 @@
           >Number of days of inactivity before an issue becomes stale</v-subheader>
         </v-flex>
         <v-flex xs8>
-          <v-text-field label="Days" mask="###" value="60"></v-text-field>
+          <v-text-field label="Days" mask="###" value="60" solo></v-text-field>
         </v-flex>
       </v-layout>
 
@@ -19,7 +19,7 @@
           >Number of days of inactivity before a stale issue is closed</v-subheader>
         </v-flex>
         <v-flex xs8>
-          <v-text-field label="Days" mask="###" value="7"></v-text-field>
+          <v-text-field label="Days" mask="###" value="7" solo></v-text-field>
         </v-flex>
       </v-layout>
 
@@ -49,33 +49,25 @@
         </v-flex>
       </v-layout>
 
-      <v-layout row>
-        <v-flex xs4>
-          <v-subheader>Suffix for time zone</v-subheader>
-        </v-flex>
-        <v-flex xs8>
-          <v-text-field label="Label Text" value="12:30:00" type="time" suffix="PST"></v-text-field>
-        </v-flex>
-      </v-layout>
+      <CommentSettings
+        v-model="comments.stale.model"
+        :header="comments.stale.header" 
+      />
+
+      <CommentSettings
+        v-model="comments.close.model"
+        :header="comments.close.header" 
+      />
     </v-container>
-
-    <!-- <v-layout column wrap></v-layout>
-    <v-layout row wrap>
-      <v-flex grow>Number of days of inactivity before an issue becomes stale</v-flex>
-      <v-flex grow>60</v-flex>
-    </v-layout>-->
-
-    <!-- <v-card-text style="height: 200px;"></v-card-text> -->
-    <!-- <RepoList v-if="!searchRepos"/> -->
   </v-card>
 </template>
 
 <script>
-import RepoList from "@/components/RepoList";
 import LabelList from "@/components/LabelList";
+import CommentSettings from "@/components/CommentSettings";
 export default {
-  name: "BotSettings",
-  components: { RepoList, LabelList },
+  name: "StaleBotSettings",
+  components: { LabelList, CommentSettings },
   data() {
     return {
       searchRepos: false,
@@ -111,16 +103,43 @@ export default {
         { id: 4, name: "bug" },
         { id: 5, name: "improvements" }
       ],
-      staleLabels: [],
-      exceptLabels: []
+      comments: {
+        stale: {
+          model: {
+            text: "This issue was marked as stale due to inactivity",
+            label: "Enter text for comment",
+            enabled: true
+          },
+          header: "Add comment to issue when it is marked as stale"
+        },
+        close: {
+          model: {
+            text: "This stale issue was closed due to inactivity",
+            label: "Enter text for comment",
+            enabled: true
+          },
+          header: "Add comment to stale issue when it is closed"
+        },
+        
+      },
+      staleLabels: [ 2 ],
+      exceptLabels: [ 1 ]
     };
   },
-  methods: {
-    remove(item) {
-      const index = this.exceptLabels.indexOf(item.name);
-      if (index >= 0) this.exceptLabels.splice(index, 1);
-    }
-  }
+  // watch: {
+  //   staleLabels: {
+  //     handler: function() {
+  //       console.log(`[Bot Settings] staleLabels was changed: [${JSON.stringify(this.staleLabels)}]`)
+  //     },
+  //     deep: true
+  //   },
+  //   exceptLabels: {
+  //     handler: function() {
+  //       console.log(`[Bot Settings] exceptLabels was changed: [${JSON.stringify(this.exceptLabels)}]`)
+  //     },
+  //     deep: true
+  //   } 
+  // }
 };
 </script>
 

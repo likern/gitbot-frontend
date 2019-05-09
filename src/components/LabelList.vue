@@ -8,6 +8,7 @@
     chips
     multiple
     color="blue-grey lighten-2"
+    solo
     @input="emitValue"
   >
     <template v-slot:selection="data">
