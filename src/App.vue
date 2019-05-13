@@ -31,6 +31,9 @@
           <ReposSwitch/>
         </v-flex>-->
         <v-flex grow mx-5 pt-2>
+          <BotFeatures/>
+        </v-flex>
+        <v-flex grow mx-5 pt-2>
           <StaleBotSettings/>
         </v-flex>
       </v-layout>
@@ -43,13 +46,14 @@
 
 <script>
 import ReposSwitch from "./components/ReposSwitch";
-import StaleBotSettings from "./components/StaleBotSettings";
+// import StaleBotSettings from "./components/StaleBotSettings";
+import BotFeatures from "@/components/BotFeatures";
 
 export default {
   name: "App",
   components: {
     ReposSwitch,
-    StaleBotSettings
+    BotFeatures
   },
   data() {
     return {

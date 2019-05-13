@@ -1,7 +1,7 @@
 <template>
   <v-card mt-5>
     <v-container fluid>
-      <ButtonGroupSettings v-model="buttons"/>
+      <!-- <ButtonGroupSettings v-model="buttons"/> -->
       <!-- <v-layout row>
         <v-flex xs4>
           <v-subheader class="bot-settings__subheader__">Select the type of objects to be monitored</v-subheader>
@@ -18,7 +18,7 @@
         <v-flex xs4>
           <v-subheader
             class="bot-settings__subheader__"
-          >Number of days of inactivity before an issue becomes stale</v-subheader>
+          >Number of days of inactivity before pull request becomes stale</v-subheader>
         </v-flex>
         <v-flex xs8>
           <v-text-field label="Days" mask="###" value="60" solo></v-text-field>
@@ -29,7 +29,7 @@
         <v-flex xs4>
           <v-subheader
             class="bot-settings__subheader__"
-          >Number of days of inactivity before a stale issue is closed</v-subheader>
+          >Number of days of inactivity before a stale pull request is closed</v-subheader>
         </v-flex>
         <v-flex xs8>
           <v-text-field label="Days" mask="###" value="7" solo></v-text-field>
@@ -40,7 +40,7 @@
         <v-flex xs4>
           <v-subheader
             class="bot-settings__subheader__"
-          >Labels to use when marking an issue as stale</v-subheader>
+          >Labels to use when marking pull request as stale</v-subheader>
         </v-flex>
         <v-flex xs8>
           <LabelList v-model="staleLabels" :labels="labels" defaultText="Labels for stale issue"/>
@@ -51,7 +51,7 @@
         <v-flex xs4>
           <v-subheader
             class="bot-settings__subheader__"
-          >Issues with these labels will never be considered stale</v-subheader>
+          >Pull requests with these labels will never be considered stale</v-subheader>
         </v-flex>
         <v-flex xs8>
           <LabelList
@@ -67,7 +67,7 @@
       <CommentSettings v-model="comments.close.model" :header="comments.close.header"/>
 
       <v-layout row justify-end>
-        <v-btn :disabled="!buttons.create" color="success">CREATE</v-btn>
+        <v-btn :disabled="!buttons.create" color="success">ENABLE</v-btn>
       </v-layout>
     </v-container>
   </v-card>
@@ -78,7 +78,7 @@ import LabelList from "@/components/LabelList";
 import CommentSettings from "@/components/CommentSettings";
 import ButtonGroupSettings from "@/components/ButtonGroupSettings";
 export default {
-  name: "StaleBotSettings",
+  name: "StalePullRequestSettings",
   components: { ButtonGroupSettings, LabelList, CommentSettings },
   data() {
     return {
@@ -118,19 +118,19 @@ export default {
       comments: {
         stale: {
           model: {
-            text: "This issue was marked as stale due to inactivity",
+            text: "This pull request was marked as stale due to inactivity",
             label: "Enter text for comment",
             enabled: true
           },
-          header: "Add comment to issue when it is marked as stale"
+          header: "Add comment to pull request when it is marked as stale"
         },
         close: {
           model: {
-            text: "This stale issue was closed due to inactivity",
+            text: "This stale pull request was closed due to inactivity",
             label: "Enter text for comment",
             enabled: true
           },
-          header: "Add comment to stale issue when it is closed"
+          header: "Add comment to stale pull request when it is closed"
         }
       },
       staleLabels: [2],
