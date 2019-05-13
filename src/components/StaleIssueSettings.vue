@@ -1,85 +1,60 @@
 <template>
-  <v-card mt-5>
-    <v-container fluid>
-      <!-- <ButtonGroupSettings v-model="buttons"/> -->
-      <!-- <v-layout row>
-        <v-flex xs4>
-          <v-subheader class="bot-settings__subheader__">Select the type of objects to be monitored</v-subheader>
-        </v-flex>
-        <v-flex xs8>
-          <v-btn-toggle v-model="text" multiple>
-            <v-btn value="left">ISSUE</v-btn>
-            <v-btn value="center">PULL REQUEST</v-btn>
-          </v-btn-toggle>
-        </v-flex>
-      </v-layout>-->
+  <v-container fluid>
+    <v-layout row>
+      <v-flex xs4>
+        <v-subheader
+          class="bot-settings__subheader__"
+        >Number of days of inactivity before an issue becomes stale</v-subheader>
+      </v-flex>
+      <v-flex xs8>
+        <v-text-field label="Days" mask="###" value="60" solo></v-text-field>
+      </v-flex>
+    </v-layout>
 
-      <v-layout row>
-        <v-flex xs4>
-          <v-subheader
-            class="bot-settings__subheader__"
-          >Number of days of inactivity before an issue becomes stale</v-subheader>
-        </v-flex>
-        <v-flex xs8>
-          <v-text-field label="Days" mask="###" value="60" solo></v-text-field>
-        </v-flex>
-      </v-layout>
+    <v-layout row>
+      <v-flex xs4>
+        <v-subheader
+          class="bot-settings__subheader__"
+        >Number of days of inactivity before a stale issue is closed</v-subheader>
+      </v-flex>
+      <v-flex xs8>
+        <v-text-field label="Days" mask="###" value="7" solo></v-text-field>
+      </v-flex>
+    </v-layout>
 
-      <v-layout row>
-        <v-flex xs4>
-          <v-subheader
-            class="bot-settings__subheader__"
-          >Number of days of inactivity before a stale issue is closed</v-subheader>
-        </v-flex>
-        <v-flex xs8>
-          <v-text-field label="Days" mask="###" value="7" solo></v-text-field>
-        </v-flex>
-      </v-layout>
+    <v-layout row>
+      <v-flex xs4>
+        <v-subheader class="bot-settings__subheader__">Labels to use when marking an issue as stale</v-subheader>
+      </v-flex>
+      <v-flex xs8>
+        <LabelList v-model="staleLabels" :labels="labels" defaultText="Labels for stale issue"/>
+      </v-flex>
+    </v-layout>
 
-      <v-layout row>
-        <v-flex xs4>
-          <v-subheader
-            class="bot-settings__subheader__"
-          >Labels to use when marking an issue as stale</v-subheader>
-        </v-flex>
-        <v-flex xs8>
-          <LabelList v-model="staleLabels" :labels="labels" defaultText="Labels for stale issue"/>
-        </v-flex>
-      </v-layout>
+    <v-layout row>
+      <v-flex xs4>
+        <v-subheader
+          class="bot-settings__subheader__"
+        >Issues with these labels will never be considered stale</v-subheader>
+      </v-flex>
+      <v-flex xs8>
+        <LabelList
+          v-model="exceptLabels"
+          :labels="labels"
+          defaultText="Exclude issues with labels"
+        />
+      </v-flex>
+    </v-layout>
 
-      <v-layout row>
-        <v-flex xs4>
-          <v-subheader
-            class="bot-settings__subheader__"
-          >Issues with these labels will never be considered stale</v-subheader>
-        </v-flex>
-        <v-flex xs8>
-          <LabelList
-            v-model="exceptLabels"
-            :labels="labels"
-            defaultText="Exclude issues with labels"
-          />
-        </v-flex>
-      </v-layout>
+    <CommentSettings v-model="comments.stale.model" :header="comments.stale.header"/>
 
-      <CommentSettings v-model="comments.stale.model" :header="comments.stale.header"/>
-
-      <CommentSettings v-model="comments.close.model" :header="comments.close.header"/>
-
-      <v-layout row justify-end>
-        <v-btn color="error" @click="disableButton">DISABLE</v-btn>
-        <v-btn color="success" @click="enableButton">ENABLE</v-btn>
-      </v-layout>
-    </v-container>
-    <!-- <FeatureButtons v-model="buttons"/> -->
-  </v-card>
+    <CommentSettings v-model="comments.close.model" :header="comments.close.header"/>
+  </v-container>
 </template>
 
 <script>
 import LabelList from "@/components/LabelList";
 import CommentSettings from "@/components/CommentSettings";
-import ButtonGroupSettings from "@/components/ButtonGroupSettings";
-import FeatureButtons from "@/components/FeatureButtons";
 export default {
   name: "StaleIssueSettings",
   props: {
@@ -89,8 +64,6 @@ export default {
     }
   },
   components: {
-    FeatureButtons,
-    ButtonGroupSettings,
     LabelList,
     CommentSettings
   },
@@ -154,16 +127,6 @@ export default {
         pullRequest: true
       }
     };
-  },
-  methods: {
-    enableButton() {
-      this.$emit("input", true);
-      // this.$emit("stale-issue", true);
-    },
-    disableButton() {
-      // this.$emit("stale-issue", false);
-      this.$emit("input", false);
-    }
   },
   watch: {
     buttons: {
