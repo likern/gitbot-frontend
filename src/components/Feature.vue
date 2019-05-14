@@ -35,7 +35,7 @@ export default {
   },
   data() {
     return {
-      isEnabled: this.props.enabled
+      isEnabled: false
     };
   },
   methods: {
