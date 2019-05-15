@@ -21,6 +21,16 @@
                 </div>
 
                 <v-btn color="success">Signup</v-btn>
+                <div class="divider">
+                  <v-divider></v-divider>
+                </div>
+
+                <v-flex align-self-center mt-3>
+                  <span class="account-text">
+                    Already have account?
+                    <router-link :to="{name: 'Login'}">Login</router-link>
+                  </span>
+                </v-flex>
               </v-layout>
             </v-card-title>
           </v-card>
@@ -62,6 +72,15 @@ export default {
   margin-bottom: 16px;
   margin-left: 10px;
   margin-right: 10px;
+}
+
+.signup .divider {
+  margin-top: 6px;
+}
+
+.signup .account-text {
+  font-size: 14px;
+  color: grey;
 }
 </style>
 
