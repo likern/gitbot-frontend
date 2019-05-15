@@ -4,10 +4,16 @@
       <v-flex shrink>
         <div class="signup">
           <v-card>
+            <h2>Status: {{ status }}</h2>
             <v-card-title>
               <v-layout column>
                 <div class="field">
-                  <v-text-field label="E-mail" browser-autocomplete="email" v-model="email"/>
+                  <v-text-field
+                    label="E-mail"
+                    browser-autocomplete="email"
+                    v-model="email"
+                    :error-messages="errorMessages.email"
+                  />
                 </div>
 
                 <div class="field">
@@ -16,11 +22,14 @@
                     :type="showPassword ? 'text' : 'password'"
                     :append-icon="showPassword ? 'visibility' : 'visibility_off'"
                     v-model="password"
+                    :error-messages="errorMessages.password"
                     @click:append="showPassword = !showPassword"
                   />
                 </div>
 
-                <v-btn color="success">Signup</v-btn>
+                <span v-if="errorMessages.firebase">{{ errorMessages.firebase }}</span>
+
+                <v-btn color="success" @click="signup">Signup</v-btn>
                 <div class="divider">
                   <v-divider></v-divider>
                 </div>
@@ -41,19 +50,66 @@
 </template>
 
 <script>
+import firebaseApp from "@/firebase/init";
+import firebase from "firebase";
+import axios from "axios";
 export default {
   name: "Signup",
   data() {
     return {
+      status: null,
       email: null,
       password: null,
       showPassword: false,
+      emailFeedback: null,
+      errorMessages: {
+        email: null,
+        password: null,
+        firebase: null
+      },
       rules: {
         required: value => !!value || "Required.",
         min: v => v.length >= 6 || "Min 6 characters",
         emailMatch: () => "The email and password you entered don't match"
       }
     };
+  },
+  methods: {
+    signup() {
+      if (!this.email) {
+        this.errorMessages.email = "email can't be empty";
+      }
+
+      if (!this.password) {
+        this.errorMessages.password = "password can't be empty";
+      }
+
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(this.email, this.password)
+        .then(cred => {
+          cred.user.getIdToken().then(function(token) {
+            console.log(`signup: token is [${token}]`);
+            axios
+              .post(
+                "http://helvy.ngrok.io/signup",
+                {},
+                {
+                  headers: { Authorization: `Bearer ${token}` }
+                }
+              )
+              .catch(err => {
+                console.log("error when try signup");
+                console.log(err);
+              });
+          });
+          console.log(cred.user);
+        })
+        .catch(err => {
+          console.log(err);
+          this.errorMessages.firebase = err.message;
+        });
+    }
   }
 };
 </script>
