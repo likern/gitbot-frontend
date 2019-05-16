@@ -22,6 +22,14 @@
             <v-list-tile-title>About</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
+        <v-list-tile @click="goToSettings">
+          <v-list-tile-action>
+            <v-icon>settings</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Settings</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
       </v-list>
     </v-navigation-drawer>
 
@@ -51,6 +59,11 @@ export default {
     return {
       drawer: true
     };
+  },
+  methods: {
+    goToSettings() {
+      this.$router.push({ name: "Settings" });
+    }
   }
 };
 </script>
