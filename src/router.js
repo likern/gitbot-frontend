@@ -5,11 +5,11 @@ import Frame from "@/views/Frame";
 import Signup from "@/components/auth/Signup";
 import Login from "@/components/auth/Login";
 import Settings from "@/components/settings/Settings";
+import firebase from "firebase";
 
 Vue.use(Router);
 
-export default new Router({
-  mode: "history",
+const router = new Router({
   base: process.env.BASE_URL,
   routes: [
     {
@@ -24,9 +24,12 @@ export default new Router({
     },
     {
       path: "",
-      name: "Frame",
       component: Frame,
+      meta: {
+        requiresAuth: true
+      },
       children: [
+        { path: "", component: Bots },
         {
           path: "/",
           name: "Bots",
@@ -50,3 +53,18 @@ export default new Router({
     }
   ]
 });
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(rec => rec.meta.requiresAuth)) {
+    const user = firebase.auth().currentUser;
+    if (!user) {
+      next({ name: "Login" });
+    } else {
+      next();
+    }
+  } else {
+    next();
+  }
+});
+
+export default router;
