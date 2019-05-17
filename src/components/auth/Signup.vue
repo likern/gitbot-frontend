@@ -88,7 +88,7 @@ export default {
         .auth()
         .createUserWithEmailAndPassword(this.email, this.password)
         .then(cred => {
-          cred.user.getIdToken().then(function(token) {
+          cred.user.getIdToken().then(token => {
             console.log(`signup: token is [${token}]`);
             axios
               .post(
@@ -98,6 +98,9 @@ export default {
                   headers: { Authorization: `Bearer ${token}` }
                 }
               )
+              .then(() => {
+                this.$router.push({ name: "Bots" });
+              })
               .catch(err => {
                 console.log("error when try signup");
                 console.log(err);
