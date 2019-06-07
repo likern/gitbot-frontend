@@ -33,15 +33,15 @@
     <v-divider></v-divider>
 
     <!-- <v-card-text style="height: 200px;"></v-card-text> -->
-    <RepoList v-if="!searchRepos"/>
+    <RepositoryList v-if="!searchRepos"/>
   </v-card>
 </template>
 
 <script>
-import RepoList from "@/components/RepoList";
+import RepositoryList from "./RepositoryList";
 export default {
-  name: "ReposSwitch",
-  components: { RepoList },
+  name: "RepositorySwitch",
+  components: { RepositoryList },
   data() {
     return {
       searchRepos: false,

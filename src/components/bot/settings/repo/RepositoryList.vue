@@ -17,7 +17,7 @@
 
 <script>
 export default {
-  name: "RepoList",
+  name: "RepositoryList",
   data() {
     return {
       repos: [

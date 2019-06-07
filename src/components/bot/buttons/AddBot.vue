@@ -92,7 +92,7 @@ export default {
 <style scoped>
 .bots-grid {
   display: grid;
-  grid-template-columns: repeat(3, [column] 1fr);
+  grid-template-columns: repeat(3, [column] 400px);
   grid-template-rows: repeat(3, [row] 1fr);
   grid-column-gap: 20px;
   /* justify-items: center; */

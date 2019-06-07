@@ -19,11 +19,10 @@
 </template>
 
 <script>
-import RepoList from "@/components/RepoList";
 import LabelList from "@/components/LabelList";
 export default {
   name: "CommentSettings",
-  components: { RepoList, LabelList },
+  components: { LabelList },
   props: {
     value: {
       text: {
@@ -46,14 +45,14 @@ export default {
   },
   methods: {
     updateText(event) {
-      let newValue = Object.assign(this.value)
-      newValue.text = event
+      let newValue = Object.assign(this.value);
+      newValue.text = event;
       this.$emit("input", newValue);
     },
     toggleSwitch(event) {
-      let newValue = Object.assign(this.value)
-      newValue.enabled = !this.value.enabled
-      this.$emit("input", newValue)
+      let newValue = Object.assign(this.value);
+      newValue.enabled = !this.value.enabled;
+      this.$emit("input", newValue);
     }
   }
 };
