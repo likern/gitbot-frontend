@@ -2,11 +2,10 @@
   <div id="inspire">
     <!-- <BotFeatures/> -->
     <v-flex>
-      <RepositoryTest/>
+      <Repository/>
 
       <AddBot/>
 
-      <Repository/>
       <BotFeatures/>
     </v-flex>
   </div>
@@ -15,7 +14,7 @@
 <script>
 import BotFeatures from "@/components/BotFeatures";
 import Repository from "@/components/bot/settings/repo/Repository";
-import RepositoryTest from "@/components/bot/settings/repo/RepositoryTest";
+
 import AddBot from "@/components/bot/buttons/AddBot";
 
 export default {
@@ -23,8 +22,7 @@ export default {
   components: {
     BotFeatures,
     AddBot,
-    Repository,
-    RepositoryTest
+    Repository
   },
   data() {
     return {
