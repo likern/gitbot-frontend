@@ -1,12 +1,7 @@
 <template>
   <div id="inspire">
-    <!-- <BotFeatures/> -->
     <v-flex>
-      <Repository/>
-
       <AddBot/>
-
-      <BotFeatures/>
     </v-flex>
   </div>
 </template>
