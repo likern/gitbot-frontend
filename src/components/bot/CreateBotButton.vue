@@ -1,27 +1,62 @@
 <template>
-  <v-sheet elevation="2" class="bot-card" @click>
-    <div class="add-bot">
-      <v-icon size="64">add</v-icon>
-      <div class="add-bot-text">Add Bot</div>
-    </div>
-  </v-sheet>
+  <div>
+    <g-error-message :enabled.sync="errorState" :color="error.color">{{ error.message }}</g-error-message>
+    <GDialogBowNew
+      :enabled.sync="dialog.enabled"
+      :repositories.sync="dialog.repositories"
+      :future-repositories-enabled.sync="dialog.futureRepositoriesEnabled"
+    ></GDialogBowNew>
+    <v-sheet elevation="2" :class="$style.card" @click.stop="getAvailableRepositories">
+      <div :class="$style.content">
+        <v-icon size="64">add</v-icon>
+        <div :class="$style.title">Add Bot</div>
+      </div>
+    </v-sheet>
+  </div>
 </template>
 
 <script>
 import axios from "axios";
 import firebase from "firebase";
 
+// import GSnackBar from "@/components/GSackBar/GSnackBar";
+import GErrorMessage from "@/components/GSnackBar/GErrorMessage";
+import GDialogBowNew from "@/components/GDialog/GDialogBotNew";
+
 export default {
   name: "AddBot",
+  components: {
+    GErrorMessage,
+    GDialogBowNew
+  },
   data() {
     return {
-      isEnabled: false,
-      loading: false
+      loading: false,
+      dialog: {
+        enabled: false,
+        repositories: [],
+        futureRepositoriesEnabled: false
+      },
+      error: {
+        message: "",
+        color: ""
+      }
     };
   },
+  computed: {
+    errorState: {
+      get: function() {
+        return Boolean(this.error.message);
+      },
+      set: function(newState) {
+        if (!newState) {
+          this.error.message = "";
+        }
+      }
+    }
+  },
   methods: {
-    clickEvent(val) {
-      this.isEnabled = val;
+    clickEvent() {
       this.$emit("click", true);
     },
     getAvailableRepositories() {
@@ -36,30 +71,37 @@ export default {
             })
             .then(resp => {
               console.log(resp);
-              this.repos = resp.data.available.repos;
-              this.futureReposDisabled = !resp.data.available.futureRepos;
-              this.dialog = true;
+              // this.repos = resp.data.available.repos;
+              this.dialog.repositories = resp.data.available.repos;
+              this.dialog.futureRepositoriesEnabled =
+                resp.data.available.futureRepos;
+              this.dialog.enabled = true;
             })
-            .catch(err => {
-              console.log("can't fetch available repositories from server");
-              console.log(err);
+            .catch(error => {
+              if (!error.response) {
+                this.error.color = "red";
+                this.error.message = error.message;
+              }
+              this.error.message = error.message;
             });
         })
         .catch(err => {
           console.log(err);
-          this.errorMessages.firebase = err.message;
+          this.error.message = err.message;
+          this.error.message.firebase = err.message;
         });
     }
   }
 };
 </script>
 
-<style scoped>
-.bot-card {
+<style lang="scss" module>
+.card {
   border-radius: 8px;
+  height: 100%;
 }
 
-.bot-card:hover {
+.card:hover {
   cursor: pointer;
   background-color: #f5f5f5;
 }
@@ -104,7 +146,7 @@ export default {
   text-overflow: ellipsis;
 }
 
-.add-bot {
+.content {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -112,7 +154,7 @@ export default {
   height: 100%;
 }
 
-.add-bot-text {
+.title {
   font-size: 28px;
 
   color: #0000008a;

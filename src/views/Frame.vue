@@ -1,38 +1,19 @@
 <template>
   <div id="inspire">
-    <v-toolbar color="indigo" dark fixed app>
-      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-toolbar-title>Helvy.ai</v-toolbar-title>
-    </v-toolbar>
-    <v-navigation-drawer fixed v-model="drawer" app>
-      <v-list dense>
-        <v-list-tile @click="goToBots">
-          <v-list-tile-action>
-            <v-icon>home</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>Bots</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-        <v-list-tile @click="goToAbout">
-          <v-list-tile-action>
-            <v-icon>contact_mail</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>About</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-        <v-list-tile @click="goToSettings">
-          <v-list-tile-action>
-            <v-icon>settings</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>Settings</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-      </v-list>
-    </v-navigation-drawer>
+    <v-toolbar :class="toolbar" light fixed app>
+      <!-- <v-toolbar-side-icon @click.stop="drawer = !drawer">settings</v-toolbar-side-icon> -->
+      <!-- <v-toolbar-side-icon>
+        <v-icon v-text="$vuetify.icons.box-close"></v-icon>
+      </v-toolbar-side-icon>-->
 
+      <!-- <v-icon v-text="$vuetify.icons.box-minus"/> -->
+      <v-toolbar-title :class="$style.toolbarTitle">GitBot</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-toolbar-items :class="$style.toolbarItems">
+        <v-btn :class="$style.buttonTest" flat :to="{name: 'Bots'}" :ripple="false">Bots</v-btn>
+        <v-btn flat :ripple="false">Profile</v-btn>
+      </v-toolbar-items>
+    </v-toolbar>
     <v-content>
       <v-layout align-top column>
         <v-flex grow mx-5 pt-2>
@@ -67,3 +48,23 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" module>
+.toolbar {
+}
+
+.toolbarTitle {
+  color: #666666;
+  font-size: 28px;
+}
+
+.toolbarItems {
+  // color: red;
+  // background-color: aquamarine;
+}
+
+.buttonTest {
+  color: orange;
+}
+</style>
+

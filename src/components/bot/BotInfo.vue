@@ -62,7 +62,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" module>
 .bot-card {
   border-radius: 8px;
 }
