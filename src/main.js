@@ -5,7 +5,17 @@ import router from "./router";
 import store from "./store";
 import "./registerServiceWorker";
 import firebase from "firebase";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
+// Add Font Awesome Pro version
+import { fas } from "@fortawesome/pro-solid-svg-icons";
+import { far } from "@fortawesome/pro-regular-svg-icons";
+import { fal } from "@fortawesome/pro-light-svg-icons";
+
+library.add(far, fal, fas);
+Vue.component("g-icon", FontAwesomeIcon);
+Vue.component("font-awesome-icon", FontAwesomeIcon);
 Vue.config.productionTip = false;
 
 let app = null;

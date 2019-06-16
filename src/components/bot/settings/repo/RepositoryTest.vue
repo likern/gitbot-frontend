@@ -21,7 +21,7 @@
 
       <v-list-tile ripple @click="$emit('future-repos-changed')" :disabled="futureReposDisabled">
         <v-list-tile-action>
-          <v-icon color="red darken-4" v-text="iconFutureRepos" :disabled="futureReposDisabled"></v-icon>
+          <g-icon color="red darken-4" :icon="iconFutureRepos" :disabled="futureReposDisabled"></g-icon>
         </v-list-tile-action>
         <v-list-tile-content>
           <v-list-tile-title>Use for future repositories</v-list-tile-title>
@@ -30,7 +30,7 @@
       </v-list-tile>
       <v-list-tile ripple @click="toggleAllRepos">
         <v-list-tile-action>
-          <v-icon :color="selects.length > 0 ? 'indigo darken-4' : ''" v-text="iconSelectAll"></v-icon>
+          <g-icon :color="selects.length > 0 ? 'indigo darken-4' : ''" :icon="iconSelectAll"></g-icon>
         </v-list-tile-action>
         <v-list-tile-content>
           <v-list-tile-title>Select all</v-list-tile-title>
@@ -171,13 +171,13 @@ export default {
       return this.notSelectedRepos.length != this.repos.length;
     },
     iconSelectAll() {
-      if (this.allRepos) return "$vuetify.icons.box-close";
-      if (this.someRepos) return "$vuetify.icons.box-minus";
-      return "$vuetify.icons.box-empty";
+      if (this.allRepos) return this.$vuetify.icons.boxClose;
+      if (this.someRepos) return this.$vuetify.icons.boxMinus;
+      return this.$vuetify.icons.boxEmpty;
     },
     iconFutureRepos() {
-      if (this.futureReposSelected) return "$vuetify.icons.box-selected";
-      return "$vuetify.icons.box-empty";
+      if (this.futureReposSelected) return this.$vuetify.icons.boxSelected;
+      return this.$vuetify.icons.boxEmpty;
     }
     // allRepos() {
     //   const futureRepos = {
