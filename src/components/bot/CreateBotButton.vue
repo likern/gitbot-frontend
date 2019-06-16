@@ -1,11 +1,13 @@
 <template>
-  <div>
+  <div class="vld-parent">
     <g-error-message :enabled.sync="errorState" :color="error.color">{{ error.message }}</g-error-message>
-    <GDialogBowNew
+    <g-progress :enabled.sync="loading"></g-progress>
+    <g-dialog-bot-new
       :enabled.sync="dialog.enabled"
+      :bot-name="dialog.botName"
       :repositories.sync="dialog.repositories"
       :future-repositories-enabled.sync="dialog.futureRepositoriesEnabled"
-    ></GDialogBowNew>
+    ></g-dialog-bot-new>
     <v-sheet elevation="2" :class="$style.card" @click.stop="getAvailableRepositories">
       <div :class="$style.content">
         <v-icon size="64">add</v-icon>
@@ -21,19 +23,22 @@ import firebase from "firebase";
 
 // import GSnackBar from "@/components/GSackBar/GSnackBar";
 import GErrorMessage from "@/components/GSnackBar/GErrorMessage";
-import GDialogBowNew from "@/components/GDialog/GDialogBotNew";
+import GProgress from "@/components/GProgress/GProgress";
+import GDialogBotNew from "@/components/GDialog/GDialogBotNew";
 
 export default {
   name: "AddBot",
   components: {
     GErrorMessage,
-    GDialogBowNew
+    GProgress,
+    GDialogBotNew
   },
   data() {
     return {
       loading: false,
       dialog: {
         enabled: false,
+        botName: "",
         repositories: [],
         futureRepositoriesEnabled: false
       },
@@ -60,6 +65,7 @@ export default {
       this.$emit("click", true);
     },
     getAvailableRepositories() {
+      this.loading = true;
       console.log("getAvailableRepositories");
       firebase
         .auth()
@@ -71,11 +77,11 @@ export default {
             })
             .then(resp => {
               console.log(resp);
-              // this.repos = resp.data.available.repos;
               this.dialog.repositories = resp.data.available.repos;
               this.dialog.futureRepositoriesEnabled =
                 resp.data.available.futureRepos;
               this.dialog.enabled = true;
+              this.loading = false;
             })
             .catch(error => {
               if (!error.response) {
@@ -83,12 +89,14 @@ export default {
                 this.error.message = error.message;
               }
               this.error.message = error.message;
+              this.loading = false;
             });
         })
         .catch(err => {
           console.log(err);
           this.error.message = err.message;
           this.error.message.firebase = err.message;
+          this.loading = false;
         });
     }
   }

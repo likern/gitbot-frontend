@@ -8,10 +8,12 @@
 <script>
 import CreateBotButton from "./CreateBotButton";
 import BotInfo from "./BotInfo";
+import GProgress from "@/components/GProgress/GProgress";
 export default {
   name: "AddBot",
   components: {
     CreateBotButton,
+    GProgress,
     BotInfo
   },
   data() {
