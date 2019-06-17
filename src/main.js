@@ -3,6 +3,7 @@ import "./plugins/vuetify";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
+import GIconTest from "@/components/GIcon/GIconTest";
 import "./registerServiceWorker";
 import firebase from "firebase";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -16,6 +17,8 @@ import { fal } from "@fortawesome/pro-light-svg-icons";
 library.add(far, fal, fas);
 Vue.component("g-icon", FontAwesomeIcon);
 Vue.component("font-awesome-icon", FontAwesomeIcon);
+Vue.component("g-icon-test", GIconTest);
+
 Vue.config.productionTip = false;
 
 let app = null;

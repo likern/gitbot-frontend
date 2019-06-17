@@ -1,18 +1,17 @@
 <template>
   <div class="bots-grid">
-    <CreateBotButton/>
-    <!-- <BotInfo/> -->
+    <g-button-bot-new/>
   </div>
 </template>
 
 <script>
-import CreateBotButton from "./CreateBotButton";
-import BotInfo from "./BotInfo";
+import GButtonBotNew from "@/components/GButton/GButtonBotNew";
+import BotInfo from "@/components/bot/BotInfo";
 import GProgress from "@/components/GProgress/GProgress";
 export default {
-  name: "AddBot",
+  name: "g-layout-bot-grid",
   components: {
-    CreateBotButton,
+    GButtonBotNew,
     GProgress,
     BotInfo
   },

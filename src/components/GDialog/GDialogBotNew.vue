@@ -5,7 +5,7 @@
       <v-card>
         <v-card-title>
           <span class="headline">Add a bot</span>
-          <FutureReposMark/>
+          <g-svg-future-repositories-enabled v-if="futureReposSelected" :class="$style.futureSvg"/>
         </v-card-title>
         <v-card-text>
           <v-container grid-list-md>
@@ -13,7 +13,7 @@
               <v-text-field v-model="botName" solo label="Enter a bot name" required/>
             </v-flex>
             <v-flex xs12>
-              <RepositoryTest
+              <g-repository-list
                 :selects="selects"
                 :repos="repositories"
                 :future-repos-selected="futureReposSelected"
@@ -37,26 +37,18 @@
 <script>
 import axios from "axios";
 import firebase from "firebase";
-import Repository from "@/components/bot/settings/repo/Repository";
-import RepositoryTest from "@/components/bot/settings/repo/RepositoryTest";
-import StaleIssueSettings from "@/components/StaleIssueSettings";
-import StalePullRequestSettings from "@/components/StalePullRequestSettings";
-import Feature from "@/components/Feature";
 
+import GRepositoryList from "@/components/GRepository/GRepositoryList";
 import GErrorMessage from "@/components/GSnackBar/GErrorMessage";
-
-import FutureReposMark from "@/assets/label.svg";
+import GSvgFutureRepositoriesEnabled from "@/assets/svg/future-repositories-enabled.svg";
 
 export default {
   name: "g-dialog-bot-new",
   components: {
-    Repository,
-    RepositoryTest,
-    Feature,
-    StaleIssueSettings,
-    StalePullRequestSettings,
-    FutureReposMark,
-    GErrorMessage
+    GRepositoryList,
+
+    GErrorMessage,
+    GSvgFutureRepositoriesEnabled
   },
   props: {
     enabled: {
@@ -93,32 +85,6 @@ export default {
       console.log(selects);
       this.selects = selects;
     },
-    // loadAvailRepositories() {
-    //   console.log("loadAvailRepositories");
-    //   firebase
-    //     .auth()
-    //     .currentUser.getIdToken()
-    //     .then(token => {
-    //       axios
-    //         .get("http://helvy.ngrok.io/v1/bot/new", {
-    //           headers: { Authorization: `Bearer ${token}` }
-    //         })
-    //         .then(resp => {
-    //           console.log(resp);
-    //           this.repos = resp.data.available.repos;
-    //           this.futureReposDisabled = !resp.data.available.futureRepos;
-    //           this.dialog = true;
-    //         })
-    //         .catch(err => {
-    //           console.log("can't fetch available repositories from server");
-    //           console.log(err);
-    //         });
-    //     })
-    //     .catch(err => {
-    //       console.log(err);
-    //       this.errorMessages.firebase = err.message;
-    //     });
-    // },
     create() {
       firebase
         .auth()
@@ -153,58 +119,13 @@ export default {
     cancel() {
       this.$emit("update:enabled", false);
     }
-  },
-  mounted() {
-    console.log("webhook [mounted]");
-    // firebase
-    //   .auth()
-    //   .currentUser.getIdToken()
-    //   .then(token => {
-    //     axios
-    //       .get(
-    //         "http://helvy.ngrok.io/v1/bot/new",
-    //         {},
-    //         {
-    //           headers: { Authorization: `Bearer ${token}` }
-    //         }
-    //       )
-    //       .then(response => {
-    //         console.log(response);
-    //         this.repos = response.available;
-    //       })
-    //       .catch(err => {
-    //         console.log("can't fetch available repositories from server");
-    //         console.log(err);
-    //       });
-    //   })
-    //   .catch(err => {
-    //     console.log(err);
-    //     this.errorMessages.firebase = err.message;
-    //   });
   }
 };
 </script>
 
-
-<style>
-.note-text {
-  font-size: 14px;
-}
-
-.feature-title {
-  font-size: 20px;
-  flex-direction: row;
-  flex-grow: 0;
-  justify-content: flex-end;
-}
-
-.feature-status {
-  font-size: 14px;
-  font-weight: 500;
-  background-color: #4caf50;
-  color: white;
-  border-radius: 2px;
-  padding: 8px 16px;
-  margin: 6px 8px;
+<style module>
+.futureSvg {
+  position: absolute;
+  right: 0px;
 }
 </style>

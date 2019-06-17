@@ -1,11 +1,11 @@
 import Vue from "vue";
 import Router from "vue-router";
-// import Bots from "@/views/Bots";
-import BotGrid from "@/components/bot/BotGrid";
+
+import GLayoutBotGrid from "@/components/GLayout/GLayoutBotGrid";
 import Frame from "@/views/Frame";
 import Signup from "@/components/auth/Signup";
 import Login from "@/components/auth/Login";
-import CreateBotTest from "@/components/bot/CreateBotTest";
+
 import Settings from "@/components/settings/Settings";
 import firebase from "firebase";
 
@@ -31,16 +31,16 @@ const router = new Router({
         requiresAuth: true
       },
       children: [
-        { path: "", component: BotGrid },
+        { path: "", component: GLayoutBotGrid },
         {
           path: "/",
           name: "Bots",
-          component: BotGrid
+          component: GLayoutBotGrid
         },
         {
           path: "/bot/new",
           name: "BotSettings",
-          component: CreateBotTest
+          component: GLayoutBotGrid
         },
         {
           path: "/settings",

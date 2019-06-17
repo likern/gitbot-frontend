@@ -3,6 +3,7 @@
     <g-error-message :enabled.sync="errorState" :color="error.color">{{ error.message }}</g-error-message>
     <g-progress :enabled.sync="loading"></g-progress>
     <g-dialog-bot-new
+      :key="dialog.key"
       :enabled.sync="dialog.enabled"
       :bot-name="dialog.botName"
       :repositories.sync="dialog.repositories"
@@ -21,13 +22,12 @@
 import axios from "axios";
 import firebase from "firebase";
 
-// import GSnackBar from "@/components/GSackBar/GSnackBar";
 import GErrorMessage from "@/components/GSnackBar/GErrorMessage";
 import GProgress from "@/components/GProgress/GProgress";
 import GDialogBotNew from "@/components/GDialog/GDialogBotNew";
 
 export default {
-  name: "AddBot",
+  name: "g-button-bot-new",
   components: {
     GErrorMessage,
     GProgress,
@@ -37,6 +37,7 @@ export default {
     return {
       loading: false,
       dialog: {
+        key: 0,
         enabled: false,
         botName: "",
         repositories: [],
@@ -65,8 +66,9 @@ export default {
       this.$emit("click", true);
     },
     getAvailableRepositories() {
+      this.dialog.key++;
       this.loading = true;
-      console.log("getAvailableRepositories");
+
       firebase
         .auth()
         .currentUser.getIdToken()

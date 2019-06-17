@@ -67,7 +67,7 @@ import StaleIssueSettings from "@/components/StaleIssueSettings";
 import StalePullRequestSettings from "@/components/StalePullRequestSettings";
 import Feature from "@/components/Feature";
 
-import FutureReposMark from "@/assets/label.svg";
+import FutureReposMark from "@/assets/svg/future-repositories-enabled.svg";
 
 export default {
   name: "CreateBot",
