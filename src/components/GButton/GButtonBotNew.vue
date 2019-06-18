@@ -5,7 +5,6 @@
     <g-dialog-bot-new
       :key="dialog.key"
       :enabled.sync="dialog.enabled"
-      :bot-name="dialog.botName"
       :repositories.sync="dialog.repositories"
       :future-repositories-enabled.sync="dialog.futureRepositoriesEnabled"
     ></g-dialog-bot-new>
@@ -39,7 +38,6 @@ export default {
       dialog: {
         key: 0,
         enabled: false,
-        botName: "",
         repositories: [],
         futureRepositoriesEnabled: false
       },
@@ -89,8 +87,9 @@ export default {
               if (!error.response) {
                 this.error.color = "red";
                 this.error.message = error.message;
+              } else {
+                this.error.message = error.message;
               }
-              this.error.message = error.message;
               this.loading = false;
             });
         })

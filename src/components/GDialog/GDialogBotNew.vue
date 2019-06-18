@@ -1,6 +1,6 @@
 <template>
   <div>
-    <g-error-message v-if="errorMessage">{{ errorMessage }}</g-error-message>
+    <g-error-message :enabled.sync="errorState" :color="error.color">{{ error.message }}</g-error-message>
     <v-dialog v-model="enabled" persistent max-width="600px">
       <v-card>
         <v-card-title>
@@ -38,25 +38,20 @@
 import axios from "axios";
 import firebase from "firebase";
 
-import GRepositoryList from "@/components/GRepository/GRepositoryList";
 import GErrorMessage from "@/components/GSnackBar/GErrorMessage";
+import GRepositoryList from "@/components/GRepository/GRepositoryList";
 import GSvgFutureRepositoriesEnabled from "@/assets/svg/future-repositories-enabled.svg";
 
 export default {
   name: "g-dialog-bot-new",
   components: {
     GRepositoryList,
-
     GErrorMessage,
     GSvgFutureRepositoriesEnabled
   },
   props: {
     enabled: {
       type: Boolean,
-      required: true
-    },
-    botName: {
-      type: String,
       required: true
     },
     repositories: {
@@ -71,11 +66,30 @@ export default {
   },
   data() {
     return {
+      botName: "",
       selects: [],
       futureReposSelected: false,
       expandIndex: null,
-      errorMessage: ""
+      error: {
+        message: "",
+        color: ""
+      }
     };
+  },
+  computed: {
+    errorState: {
+      get: function() {
+        return Boolean(this.error.message);
+      },
+      set: function(newState) {
+        if (!newState) {
+          this.error.message = "";
+        }
+      }
+    },
+    selectedRepositories() {
+      return this.selects.map(id => this.repos[id]);
+    }
   },
   methods: {
     shrink() {
@@ -94,7 +108,9 @@ export default {
             .post(
               "http://helvy.ngrok.io/v1/bot/new",
               {
-                botName: "Test new bot"
+                // Add support for future repositories option
+                name: this.botName,
+                repositories: this.selects
               },
               {
                 headers: { Authorization: `Bearer ${token}` }
@@ -104,16 +120,22 @@ export default {
               // this.dialog = false;
               this.$router.push({ name: "Bots" });
             })
-            .catch(err => {
-              const message = "Can't create a new bot due to error";
-              console.log(message);
-              console.log(err);
-              this.errorMessage = message;
+            .catch(error => {
+              if (!error.response) {
+                this.error.color = "red";
+                this.error.message = error.message;
+              } else if (error.response.status >= 500) {
+                this.error.color = "red";
+                this.error.message = error.response.statusText;
+              } else {
+                this.error.color = "red";
+                this.error.message = error.response.statusText;
+              }
             });
         })
-        .catch(err => {
-          console.log(err);
-          this.errorMessages.firebase = err.message;
+        .catch(error => {
+          console.log(error);
+          this.error.message = error.message;
         });
     },
     cancel() {
