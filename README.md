@@ -1,4 +1,4 @@
-# helvy-front
+# gitbot-frontend
 
 ## Project setup
 ```
