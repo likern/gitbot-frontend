@@ -1,71 +1,83 @@
 <template>
-  <v-container>
-    <v-layout justify-center>
-      <v-flex shrink>
-        <div class="signup">
-          <v-card>
-            <h2>Status: {{ status }}</h2>
-            <v-card-title>
-              <v-layout column>
-                <div class="field">
-                  <v-text-field
-                    label="E-mail"
-                    browser-autocomplete="email"
-                    v-model="email"
-                    :error-messages="errorMessages.email"
-                  />
-                </div>
+  <div>
+    <g-error-message :enabled.sync="errorState" :color="error.color">{{ error.message }}</g-error-message>
+    <v-form>
+      <v-container>
+        <v-layout justify-center>
+          <v-flex shrink>
+            <div class="signup">
+              <v-card>
+                <v-card-title>
+                  <v-layout column>
+                    <div class="field">
+                      <v-text-field
+                        label="E-mail"
+                        v-model="email"
+                        type="email"
+                        browser-autocomplete="email"
+                        :error-messages="errorMessages.email"
+                      ></v-text-field>
+                    </div>
 
-                <div class="field">
-                  <v-text-field
-                    label="Password"
-                    :type="showPassword ? 'text' : 'password'"
-                    :append-icon="showPassword ? 'visibility' : 'visibility_off'"
-                    v-model="password"
-                    :error-messages="errorMessages.password"
-                    @click:append="showPassword = !showPassword"
-                  />
-                </div>
+                    <div class="field">
+                      <v-text-field
+                        label="Password"
+                        v-model="password"
+                        browser-autocomplete="new-password"
+                        :type="showPassword ? 'text' : 'password'"
+                        :append-icon="showPassword ? 'visibility' : 'visibility_off'"
+                        :error-messages="errorMessages.password"
+                        @click:append="showPassword = !showPassword"
+                      />
+                    </div>
 
-                <span v-if="errorMessages.firebase">{{ errorMessages.firebase }}</span>
+                    <v-btn color="success" @click="signup">Signup</v-btn>
+                    <div class="divider">
+                      <v-divider></v-divider>
+                    </div>
 
-                <v-btn color="success" @click="signup">Signup</v-btn>
-                <div class="divider">
-                  <v-divider></v-divider>
-                </div>
-
-                <v-flex align-self-center mt-3>
-                  <span class="account-text">
-                    Already have account?
-                    <router-link :to="{name: 'Login'}">Login</router-link>
-                  </span>
-                </v-flex>
-              </v-layout>
-            </v-card-title>
-          </v-card>
-        </div>
-      </v-flex>
-    </v-layout>
-  </v-container>
+                    <v-flex align-self-center mt-3>
+                      <span class="account-text">
+                        Already have account?
+                        <router-link :to="{name: 'Login'}">Login</router-link>
+                      </span>
+                    </v-flex>
+                  </v-layout>
+                </v-card-title>
+              </v-card>
+            </div>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-form>
+  </div>
 </template>
 
 <script>
 import firebaseApp from "@/firebase/init";
-import firebase from "firebase";
-import axios from "axios";
+import gitbot from "@/api/gitbot";
+
+import GErrorMessage from "@/components/GSnackBar/GErrorMessage";
+
 export default {
   name: "Signup",
+  components: {
+    GErrorMessage
+  },
   data() {
     return {
       status: null,
-      email: null,
+      email: "",
       password: null,
       showPassword: false,
       emailFeedback: null,
+      error: {
+        message: "",
+        color: ""
+      },
       errorMessages: {
         email: null,
-        password: null,
-        firebase: null
+        password: null
       },
       rules: {
         required: value => !!value || "Required.",
@@ -74,8 +86,20 @@ export default {
       }
     };
   },
+  computed: {
+    errorState: {
+      get: function() {
+        return Boolean(this.error.message);
+      },
+      set: function(newState) {
+        if (!newState) {
+          this.error.message = "";
+        }
+      }
+    }
+  },
   methods: {
-    signup() {
+    async signup() {
       if (!this.email) {
         this.errorMessages.email = "email can't be empty";
       }
@@ -84,34 +108,21 @@ export default {
         this.errorMessages.password = "password can't be empty";
       }
 
-      firebase
-        .auth()
-        .createUserWithEmailAndPassword(this.email, this.password)
-        .then(cred => {
-          cred.user.getIdToken().then(token => {
-            console.log(`signup: token is [${token}]`);
-            axios
-              .post(
-                "http://helvy.ngrok.io/signup",
-                {},
-                {
-                  headers: { Authorization: `Bearer ${token}` }
-                }
-              )
-              .then(() => {
-                this.$router.push({ name: "Bots" });
-              })
-              .catch(err => {
-                console.log("error when try signup");
-                console.log(err);
-              });
-          });
-          console.log(cred.user);
-        })
-        .catch(err => {
-          console.log(err);
-          this.errorMessages.firebase = err.message;
-        });
+      try {
+        await gitbot.signup(this.email, this.password);
+        this.$router.push({ name: "Bots" });
+      } catch (error) {
+        if (!error.response) {
+          this.error.color = "red";
+          this.error.message = error.message;
+        } else if (error.response.status >= 500) {
+          this.error.color = "red";
+          this.error.message = error.response.statusText;
+        } else {
+          this.error.color = "red";
+          this.error.message = error.response.statusText;
+        }
+      }
     }
   }
 };
