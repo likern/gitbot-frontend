@@ -15,7 +15,7 @@ const addAuthorizationHeader = axiosInstance => {
 };
 
 const getToken = async () => {
-  const currentUser = firebase.auth().currentUser;
+  const currentUser = await firebase.auth().currentUser;
   if (!currentUser) {
     throw Error("User is not signed in");
   }
@@ -23,25 +23,15 @@ const getToken = async () => {
 };
 
 const service = axios.create({
-  baseURL: `https://dev.gitbot.im${API_VERSION}`,
-  timeout: 1000
+  baseURL: `http://dev.gitbot.im${API_VERSION}`,
+  timeout: 10000
 });
 
 addAuthorizationHeader(service);
 
-// auth axios instance do not use versioning for routes
-// it's intended to be used for <gitbot>/signup
-// instead of <gitbot>/v1/signup
-const auth = axios.create({
-  baseURL: "https://dev.gitbot.im",
-  timeout: 1000
-});
-
-addAuthorizationHeader(auth);
-
 const signup = async (email, password) => {
   await firebase.auth().createUserWithEmailAndPassword(email, password);
-  return auth.post("/signup");
+  return service.post("/signup");
 };
 
 const login = async (email, password) => {
@@ -52,8 +42,19 @@ const createBot = async data => {
   return service.post("/bot/new", data);
 };
 
+const getAvailableRepositories = async () => {
+  return service.get("/bot/new");
+};
+
+const getBots = async (detailed = false) => {
+  const params = { detailed };
+  return service.get("/bots/list", { params });
+};
+
 export default {
   signup,
   login,
-  createBot
+  createBot,
+  getBots,
+  getAvailableRepositories
 };
