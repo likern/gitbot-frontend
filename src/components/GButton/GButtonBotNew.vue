@@ -1,6 +1,6 @@
 <template>
   <div class="vld-parent">
-    <g-error-message :enabled.sync="errorState" :color="error.color">{{ error.message }}</g-error-message>
+    <g-global-notification :enabled.sync="errorState" :color="error.color">{{ error.message }}</g-global-notification>
     <g-progress :enabled.sync="loading"></g-progress>
     <g-dialog-bot-new
       :key="dialog.key"
@@ -20,7 +20,7 @@
 <script>
 import gitbot from "@/api/gitbot";
 
-import GErrorMessage from "@/components/GSnackBar/GErrorMessage";
+import GGlobalNotification from "@/components/GSnackBar/GGlobalNotification";
 import GProgress from "@/components/GProgress/GProgress";
 import GDialogBotNew from "@/components/GDialog/GDialogBotNew";
 import GCardBaseBot from "@/components/GCard/GCardBaseBot";
@@ -28,7 +28,7 @@ import GCardBaseBot from "@/components/GCard/GCardBaseBot";
 export default {
   name: "g-button-bot-new",
   components: {
-    GErrorMessage,
+    GGlobalNotification,
     GProgress,
     GCardBaseBot,
     GDialogBotNew

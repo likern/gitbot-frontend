@@ -1,7 +1,7 @@
 <template>
   <div>
-    <g-error-message :enabled.sync="errorState" :color="error.color">{{ error.message }}</g-error-message>
     <v-dialog v-model="enabled" persistent max-width="600px">
+      <g-progress :enabled.sync="loading"></g-progress>
       <v-card>
         <v-card-title>
           <span class="headline">Add a bot</span>
@@ -35,10 +35,7 @@
 </template>
 
 <script>
-import axios from "axios";
-import firebase from "firebase";
-
-import GErrorMessage from "@/components/GSnackBar/GErrorMessage";
+import GProgress from "@/components/GProgress/GProgress";
 import GRepositoryList from "@/components/GRepository/GRepositoryList";
 import GSvgFutureRepositoriesEnabled from "@/assets/svg/future-repositories-enabled.svg";
 
@@ -46,7 +43,7 @@ export default {
   name: "g-dialog-bot-new",
   components: {
     GRepositoryList,
-    GErrorMessage,
+    GProgress,
     GSvgFutureRepositoriesEnabled
   },
   props: {
@@ -66,27 +63,14 @@ export default {
   },
   data() {
     return {
+      loading: false,
       botName: "",
       selects: [],
       futureReposSelected: false,
-      expandIndex: null,
-      error: {
-        message: "",
-        color: ""
-      }
+      expandIndex: null
     };
   },
   computed: {
-    errorState: {
-      get: function() {
-        return Boolean(this.error.message);
-      },
-      set: function(newState) {
-        if (!newState) {
-          this.error.message = "";
-        }
-      }
-    },
     selectedRepositories() {
       return this.selects.map(id => this.repos[id]);
     }
@@ -99,44 +83,29 @@ export default {
       console.log(selects);
       this.selects = selects;
     },
-    create() {
-      firebase
-        .auth()
-        .currentUser.getIdToken()
-        .then(token => {
-          axios
-            .post(
-              "http://helvy.ngrok.io/v1/bot/new",
-              {
-                // Add support for future repositories option
-                name: this.botName,
-                repositories: this.selects
-              },
-              {
-                headers: { Authorization: `Bearer ${token}` }
-              }
-            )
-            .then(() => {
-              // this.dialog = false;
-              this.$router.push({ name: "Bots" });
-            })
-            .catch(error => {
-              if (!error.response) {
-                this.error.color = "red";
-                this.error.message = error.message;
-              } else if (error.response.status >= 500) {
-                this.error.color = "red";
-                this.error.message = error.response.statusText;
-              } else {
-                this.error.color = "red";
-                this.error.message = error.response.statusText;
-              }
-            });
-        })
-        .catch(error => {
-          console.log(error);
-          this.error.message = error.message;
-        });
+    async create() {
+      try {
+        this.loading = true;
+
+        let repoNames = [];
+        for (const repo of this.repositories) {
+          if (this.selects.includes(repo.id)) {
+            repoNames.push(repo.name);
+          }
+        }
+
+        const payload = {
+          // Add support for future repositories option
+          name: this.botName,
+          repositories: repoNames
+        };
+
+        await this.$store.dispatch("CREATE_BOT", payload);
+      } finally {
+        this.loading = false;
+        this.$emit("update:enabled", false);
+        this.$router.push({ name: "Bots" });
+      }
     },
     cancel() {
       this.$emit("update:enabled", false);

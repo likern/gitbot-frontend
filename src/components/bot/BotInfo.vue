@@ -63,20 +63,6 @@ export default {
 </script>
 
 <style lang="scss" module>
-.bot-card {
-  border-radius: 8px;
-}
-
-.bot-card:hover {
-  cursor: pointer;
-  background-color: #f5f5f5;
-}
-
-.add-bot-card {
-  display: flex;
-  border-radius: 8px;
-}
-
 .bot-main {
   padding: 0px 16px 0px 16px;
 }
@@ -111,36 +97,5 @@ export default {
 
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-.add-bot {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-}
-
-.add-bot-text {
-  font-size: 28px;
-  color: #0000008a;
-}
-
-.add-button-content {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-}
-
-.add-button-text {
-  font-size: 22px;
-  color: #757575;
-}
-
-.card-style {
-  height: 150px;
-  width: 200px;
-  max-width: 300px;
 }
 </style>

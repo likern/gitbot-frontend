@@ -1,6 +1,6 @@
 <template>
   <div>
-    <g-error-message :enabled.sync="errorState" :color="error.color">{{ error.message }}</g-error-message>
+    <g-global-notification :enabled.sync="errorState" :color="error.color">{{ error.message }}</g-global-notification>
     <v-form>
       <v-container>
         <v-layout justify-center>
@@ -57,12 +57,12 @@
 import firebaseApp from "@/firebase/init";
 import gitbot from "@/api/gitbot";
 
-import GErrorMessage from "@/components/GSnackBar/GErrorMessage";
+import GGlobalNotification from "@/components/GSnackBar/GGlobalNotification";
 
 export default {
   name: "Signup",
   components: {
-    GErrorMessage
+    GGlobalNotification
   },
   data() {
     return {

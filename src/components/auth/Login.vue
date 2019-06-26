@@ -55,6 +55,7 @@
 
 <script>
 import firebase from "firebase";
+import gitbot from "@/api/gitbot";
 export default {
   name: "Login",
   data() {
@@ -74,18 +75,26 @@ export default {
     };
   },
   methods: {
-    login() {
+    async login() {
       /* FIXME:  Check email and password fields */
-      firebase
-        .auth()
-        .signInWithEmailAndPassword(this.email, this.password)
-        .then(() => {
-          this.$router.push({ name: "Bots" });
-        })
-        .catch(error => {
-          this.snackbar.text = error.message;
-          this.snackbar.model = true;
-        });
+      try {
+        await gitbot.login(this.email, this.password);
+        this.$router.push({ name: "Bots" });
+      } catch (error) {
+        this.snackbar.text = error.message;
+        this.snackbar.model = true;
+      }
+
+      // firebase
+      //   .auth()
+      //   .signInWithEmailAndPassword(this.email, this.password)
+      //   .then(() => {
+      //     this.$router.push({ name: "Bots" });
+      //   })
+      //   .catch(error => {
+      //     this.snackbar.text = error.message;
+      //     this.snackbar.model = true;
+      //   });
     }
   }
 };

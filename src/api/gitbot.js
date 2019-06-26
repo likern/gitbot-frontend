@@ -38,15 +38,15 @@ const login = async (email, password) => {
   return firebase.auth().signInWithEmailAndPassword(email, password);
 };
 
-const createBot = async data => {
-  return service.post("/bot/new", data);
+const createBot = async payload => {
+  return service.post("/bot/new", payload);
 };
 
 const getAvailableRepositories = async () => {
   return service.get("/bot/new");
 };
 
-const getBots = async (detailed = false) => {
+const getBots = async ({ detailed = false }) => {
   const params = { detailed };
   return service.get("/bots/list", { params });
 };
