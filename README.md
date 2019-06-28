@@ -1,5 +1,7 @@
 # gitbot-frontend powered by Vue.js
 
+# Add PGP-signed commits
+
 ## Project setup
 
 ```
