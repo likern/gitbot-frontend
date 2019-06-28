@@ -40,20 +40,25 @@ export default new Vuex.Store({
     CREATE_BOT: async ({ commit, dispatch }, payload) => {
       try {
         await API.createBot(payload);
-        dispatch("GET_BOTS", { detailed: true });
+        await dispatch("GET_BOTS", { showLoading: false, detailed: true });
       } catch (error) {
         commit("SET_NOTIFICATION", toNotify(error));
       }
     },
-    GET_BOTS: async ({ commit }, options) => {
-      commit("SET_LOADING", true);
+    GET_BOTS: async ({ commit }, { showLoading = true, detailed = false }) => {
+      if (showLoading) {
+        commit("SET_LOADING", true);
+      }
+
       try {
-        const { data } = await API.getBots(options);
+        const { data } = await API.getBots({ detailed });
         commit("SET_BOTS", data.bots);
       } catch (error) {
         commit("SET_NOTIFICATION", toNotify(error));
       } finally {
-        commit("SET_LOADING", false);
+        if (showLoading) {
+          commit("SET_LOADING", false);
+        }
       }
     }
   }
