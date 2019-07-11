@@ -9,6 +9,9 @@ import firebase from "firebase";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
+// Import Tailwind CSS
+import "@/assets/css/tailwind.css";
+
 // Add Font Awesome Pro version
 import { fas } from "@fortawesome/pro-solid-svg-icons";
 import { far } from "@fortawesome/pro-regular-svg-icons";
