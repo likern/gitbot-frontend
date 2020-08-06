@@ -9,7 +9,7 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.19",
+    "@fortawesome/fontawesome-svg-core": "^1.2.30",
     "@fortawesome/pro-light-svg-icons": "^5.9.0",
     "@fortawesome/pro-regular-svg-icons": "^5.9.0",
     "@fortawesome/pro-solid-svg-icons": "^5.9.0",
